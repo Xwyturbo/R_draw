@@ -1,0 +1,76 @@
+---
+title: "**R中使用voronoiTreemap包轻松绘制圆形树状图**"
+author: "Xwyturbo"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+#  1.从Github上面安装R包。（安装前取消注释）
+```{r}
+#devtools::install_github("uRosConf/voronoiTreemap")
+```
+
+
+
+#  2.使用案例数据集
+```{r}
+library(voronoiTreemap)
+library(tidyverse)
+data(ExampleGDP)
+ExampleGDP %>% as_tibble()
+gdp_json <- vt_export_json(vt_input_from_df(ExampleGDP, 
+                                            hierachyVar0 = "h1",
+                                            hierachyVar1 = "h2", 
+                                            hierachyVar2 = "h3",
+                                            colorVar = "color", 
+                                            weightVar="weight",
+                                            labelVar = "codes"))
+
+vt_d3(gdp_json)
+```
+
+
+#  3.使用自定义数据集
+```{r}
+library(voronoiTreemap)
+library(tidyverse)
+df <- data.frame(country = c("Ukraine", "Russia", "Argentina",
+                             "China", "Romania", "Other"),
+                 prod = c(11.0, 10.6, 3.1, 2.4, 2.1, 15.3))
+
+vor <- data.frame(h1 = 'World', 
+                  h2 = c('Europe', 'Europe', 
+                         'Americas', 'Asia',
+                         'Europe', 'Other'),
+                  h3 = df$country,
+                  color = c("#009593","#009593",
+                            "#CED7BA","#E4D1B3",
+                            "#009593","#D35C79"),
+                  weight = df$prod,
+                  codes = df$country)
+
+vt <- vt_input_from_df(vor,
+                       hierachyVar0 = "h1",
+                       hierachyVar1 = "h2",
+                       hierachyVar2 = "h3",
+                       colorVar = "color",
+                       weightVar="weight",
+                       labelVar = "codes")
+
+vt_d3(vt_export_json(vt),label = T, 
+      color_border = "#000000",
+      legend = TRUE, legend_title = "Continents",
+      seed = 1,
+      size_border = "1px")
+```
+
+#  4.参考链接：
+<https://mp.weixin.qq.com/s/M4JMbgYW4wHB2eALLPDphQ>
