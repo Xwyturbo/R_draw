@@ -1,5 +1,5 @@
 ---
-title: "ggpplotly-交互可视化"
+title: "R中使用plotly包实现交互可视化"
 author: "Xwyturbo"
 date: "`r Sys.Date()`"
 output:
